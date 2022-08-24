@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-[#eeeeee] text-black text-xs xl:text-base 2xl:text-xl;
+  }
+  body {
+    @apply overflow-x-hidden;
+  }
+  button {
+    @apply hover:bg-white hover:text-blue-900 cursor-pointer;
+  }
+}
