@@ -1,8 +1,7 @@
 <script setup>
-import Nav from './components/Nav.vue';
-import Img from './components/Image.vue';
-import Texts from './components/Texts.vue';
-import Footer from './components/Footer.vue';
+import Nav from './Nav.vue';
+import Img from './Image.vue';
+import Texts from './Texts.vue';
 </script>
 
 <template>
@@ -15,5 +14,4 @@ import Footer from './components/Footer.vue';
       <Img />
     </section>
   </div>
-  <Footer />
 </template>

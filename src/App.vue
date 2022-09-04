@@ -1,19 +1,30 @@
 <script setup>
-import Nav from './components/Nav.vue';
-import Img from './components/Image.vue';
-import Texts from './components/Texts.vue';
+import { ref, computed, reactive, provide } from 'vue';
+import Home from './components/Home.vue';
+import Admin from './components/Admin.vue';
+import Login from './components/Login.vue';
+import NotFound from './components/NotFound.vue';
 import Footer from './components/Footer.vue';
+
+//routes
+const routes = {
+  '/': Home,
+  '/admin': Admin,
+  '/login': Login,
+};
+
+const currentPath = ref(window.location.hash);
+
+window.addEventListener('hashchange', () => {
+  currentPath.value = window.location.hash;
+});
+
+const currentView = computed(() => {
+  return routes[currentPath.value.slice(1) || '/'] || NotFound;
+});
 </script>
 
 <template>
-  <div class="flex flex-row">
-    <section class="w-4/6 flex flex-col">
-      <Nav />
-      <Texts />
-    </section>
-    <section class="bg-[#212834] w-2/6 h-auto">
-      <Img />
-    </section>
-  </div>
+  <component :is="currentView" />
   <Footer />
 </template>
