@@ -13,10 +13,6 @@ onMounted(() => {
     signInSuccessUrl: '#/admin',
     signInOptions: [
       {
-        provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-        disableSignUp: { status: true },
-      },
-      {
         provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
         disableSignUp: { status: true },
       },
