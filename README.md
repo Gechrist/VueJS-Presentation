@@ -1,7 +1,25 @@
-# Vue 3 + Vite
+# [VUE.JS Personal Website](https://dr-nikolaosmavropoulos.vercel.app/)
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## OVERVIEW
 
-## Recommended IDE Setup
+This is a personal website built with [Vue.JS](https://vuejs.org/) and [TailwindCSS](https://tailwindcss.com/), deployed with [Vercel](https://next-js-imdb.vercel.app). The data is hosted on Google Firebase Realtime Database.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+## INSTALL INSTRUCTIONS
+
+A working installation of Next.JS is required. Just clone the repository and run npm install & npm run dev:
+
+```
+git clone https://github.com/Gechrist/VueJS-Presentation.git
+npm install
+npm run dev
+
+```
+
+## LICENSE
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+## AUTHOR
+
+- [Profile](https://github.com/Gechrist/)
+- [Email](mailto:gchris@hotmail.co.uk)

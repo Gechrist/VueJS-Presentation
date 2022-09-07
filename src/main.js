@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
-import './index.css';
+import FireBaseApp from './assets/utils/initFirebase.js';
 import App from './App.vue';
+import './index.css';
 
 createApp(App).mount('#app');

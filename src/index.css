@@ -10,6 +10,6 @@
     @apply overflow-x-hidden;
   }
   button {
-    @apply hover:bg-white hover:text-blue-900 cursor-pointer;
+    @apply hover:bg-white hover:text-blue-900 cursor-pointer hover:ring-1 hover:ring-blue-900 hover:ring-inset;
   }
 }

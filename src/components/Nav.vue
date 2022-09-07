@@ -1,8 +1,8 @@
 <script setup>
 const icons = [
   { text: 'Bio', alt: 'NM bio' },
-  { text: 'Education', alt: 'NM education' },
   { text: 'Career', alt: 'NM career' },
+  { text: 'Education', alt: 'NM education' },
   {
     text: 'Publications',
     alt: 'NM publications',
@@ -17,8 +17,10 @@ const icons = [
     <button
       v-for="(icon, index) in icons"
       :key="index"
-      @click=""
-      :class="`w-16 h-12 bg-[#212834] mix-blend-hard-light ring-1 ring-white ring-inset text-white text-xs md:w-20 md:h-20 rounded cursor-pointer hover:scale-110 animate-animated animate-fadeInLeft ${
+      @click="$emit('changeExcerpt', icon.text)"
+      :class="`${
+        index === 3 ? 'w-20' : 'w-16'
+      } h-12 bg-[#212834] mix-blend-hard-light ring-1 ring-white ring-inset text-white text-xs md:w-20 md:h-20 rounded cursor-pointer hover:scale-110 animate-animated animate-fadeInLeft ${
         index === 0
           ? 'animate-delay-[0.3s]'
           : index === 1
