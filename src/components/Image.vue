@@ -24,7 +24,9 @@ const signOutUser = () => {
 </script>
 
 <template>
-  <aside class="flex flex-col text-white min-h-[calc(100vh_-_3rem)]">
+  <aside
+    class="flex flex-col text-white min-h-[calc(100vh_-_7rem)] md:min-h-[calc(100vh_-_3rem)]"
+  >
     <img
       class="w-32 h-32 mx-auto mt-4 rounded-full md:w-64 md:h-64"
       :src="`${
