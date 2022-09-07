@@ -4,7 +4,11 @@ const contactInfo = 'Lorem Ipsum etc etc';
 </script>
 
 <template>
+<<<<<<< Updated upstream
   <div class="flex flex-col text-white">
+=======
+  <aside class="flex flex-col text-white">
+>>>>>>> Stashed changes
     <img
       class="w-32 h-32 mx-auto mt-4 rounded-full md:w-72 md:h-72"
       src="../assets/featuredImage.jpg"
