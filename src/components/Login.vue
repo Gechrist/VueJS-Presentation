@@ -4,8 +4,6 @@ import firebase from 'firebase/compat/app';
 import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
 
-const pass = 'LMuyDJ*W831*';
-
 onMounted(() => {
   let ui = firebaseui.auth.AuthUI.getInstance();
   if (!ui) {
@@ -14,8 +12,14 @@ onMounted(() => {
   var uiConfig = {
     signInSuccessUrl: '#/admin',
     signInOptions: [
-      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-      firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      {
+        provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        disableSignUp: { status: true },
+      },
+      {
+        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        disableSignUp: { status: true },
+      },
     ],
   };
   ui.start('#firebaseui-auth-container', uiConfig);
@@ -23,7 +27,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="min-h-[calc(100vh_-_4.5rem)]">
+  <main class="min-h-[calc(100vh_-_3.8rem)]">
     <div id="firebaseui-auth-container"></div>
   </main>
 </template>

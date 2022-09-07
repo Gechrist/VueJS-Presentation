@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onUnmounted, reactive } from 'vue';
+import { ref, onUnmounted, reactive, watch } from 'vue';
 import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
 import { getDatabase, ref as dbref, set, get, child } from 'firebase/database';
 import {
@@ -38,6 +38,24 @@ const photoProfile = ref(null);
 const imageError = ref(false);
 const imageFile = reactive({ file: {} });
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loggedUser.value = true;
+  } else {
+    return (window.location.href = '/');
+  }
+});
+
+// hide alert after 3 seconds
+const alertTimeout = () =>
+  setTimeout(() => {
+    message.value = '';
+  }, 4000);
+
+watch(message, (message, previousMessage) => {
+  alertTimeout();
+});
+
 //db data
 const dbRef = dbref(getDatabase());
 get(child(dbRef, 'Texts'))
@@ -46,6 +64,7 @@ get(child(dbRef, 'Texts'))
       data.texts = snapshot.val();
       name.value = data.texts.name;
       tel.value = data.texts.tel;
+      photo.value = data.texts.photo;
       email.value = data.texts.email;
       email2.value = data.texts.email2;
       address.value = data.texts.address;
@@ -57,11 +76,12 @@ get(child(dbRef, 'Texts'))
       facebook.value = data.texts.facebook;
       linkedIn.value = data.texts.linkedIn;
     } else {
-      console.log('No data available');
+      message.value = 'No data available';
     }
   })
   .catch((error) => {
     console.error(error);
+    message.value = 'Something went wrong. Please try again.';
   });
 
 const buttons = [
@@ -163,13 +183,13 @@ const state = (arg) => {
 
 const onImageInput = (e) => {
   if (!e.target.files.length) return;
-  console.log(e.target.files[0]);
   imageFile.file = e.target.files[0];
-  console.log('if', imageFile);
   photo.value = URL.createObjectURL(e.target.files[0]);
+
   if (
-    e.target.files[0].name.split('.').pop() !==
-    ('jpg' || 'jpeg' || 'png' || 'bmp' || 'webp' || 'svg')
+    !['svg', 'jpeg', 'png', 'bmp', 'webp', 'jpg'].includes(
+      e.target.files[0].name.split('.').pop()
+    )
   ) {
     imageError.value = true;
   } else {
@@ -181,72 +201,82 @@ const removeImage = (e) => {
   imageError.value = false;
   photo.value = null;
   photoProfile.value.value = null;
+  imageFile.file = null;
+};
+
+const saveToDB = () => {
+  //save to db
+  const db = getDatabase();
+  set(dbref(db, 'Texts/'), {
+    name: name.value,
+    email: email.value,
+    photo: photo.value,
+    address: address.value,
+    email2: email2.value,
+    facebook: facebook.value,
+    linkedIn: linkedIn.value,
+    tel: tel.value,
+    bioText: bioText.value,
+    educationText: educationText.value,
+    careerText: careerText.value,
+    publicationsText: publicationsText.value,
+    welcomeText: welcomeText.value,
+  })
+    .then(() => {
+      showSaveButton.value = true;
+      showSpinner.value = false;
+      message.value = 'Saved Successfully!';
+    })
+    .catch((error) => {
+      console.log(error.message);
+      showSaveButton.value = true;
+      showSpinner.value = false;
+      message.value = 'Something went wrong. Please try again.';
+    });
 };
 
 const onSubmit = () => {
   showSaveButton.value = false;
   showSpinner.value = true;
 
-  //upload image
-  const storage = getStorage();
-  const imageRef = stref(storage, imageFile.file.name);
-  const uploadTask = uploadBytesResumable(imageRef, imageFile.file);
-  uploadTask.on(
-    'state_changed',
-    (snapshot) => {
-      // Observe state change events such as progress, pause, and resume
-      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log('Upload is ' + progress + '% done');
-      switch (snapshot.state) {
-        case 'paused':
-          console.log('Upload is paused');
-          break;
-        case 'running':
-          console.log('Upload is running');
-          break;
+  if (photoProfile.value.value) {
+    //upload image
+    const storage = getStorage();
+    const imageRef = stref(storage, imageFile.file.name);
+    const uploadTask = uploadBytesResumable(imageRef, imageFile.file);
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+        }
+      },
+      (error) => {
+        showSaveButton.value = true;
+        showSpinner.value = false;
+        console.log(error.message);
+        message.value = 'Something went wrong. Please try again.';
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          photo.value = downloadURL;
+          saveToDB();
+        });
       }
-    },
-    (error) => {
-      showSaveButton.value = true;
-      showSpinner.value = false;
-      console.log(error.message);
-      message.value = 'Something went wrong. Please try again.';
-    },
-    () => {
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        photo.value = downloadURL;
-        //save to db
-        const db = getDatabase();
-        set(dbref(db, 'Texts/'), {
-          name: name.value,
-          email: email.value,
-          photo: photo.value,
-          address: address.value,
-          email2: email2.value,
-          facebook: facebook.value,
-          linkedIn: linkedIn.value,
-          tel: tel.value,
-          bioText: bioText.value,
-          educationText: educationText.value,
-          careerText: careerText.value,
-          publicationsText: publicationsText.value,
-          welcomeText: welcomeText.value,
-        })
-          .then(() => {
-            showSaveButton.value = true;
-            showSpinner.value = false;
-            message.value = 'Saved Successfully!';
-          })
-          .catch((error) => {
-            console.log(error.message);
-            showSaveButton.value = true;
-            showSpinner.value = false;
-            message.value = 'Something went wrong. Please try again.';
-          });
-      });
-    }
-  );
+    );
+  } else {
+    saveToDB();
+  }
 };
 
 const clearMessage = () => {
@@ -264,22 +294,17 @@ const signOutUser = () => {
     });
 };
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    loggedUser.value = true;
-  } else {
-    return (window.location.href = '/');
-  }
+onUnmounted(() => {
+  URL.revokeObjectURL(photoProfile.value);
+  clearTimeout(alertTimeout);
 });
-
-onUnmounted(() => URL.revokeObjectURL(photoProfile.value));
 </script>
 
 <template>
   <main class="min-h-[calc(100vh_-_4.5rem)]">
     <aside
       v-if="message"
-      class="w-72 flex flex-row absolute justify-center top-16 right-2 z-40 text-white animate-slideInRight rounded h-auto py-2 bg-black"
+      class="w-72 flex flex-row fixed justify-center top-16 right-2 z-40 text-white animate-slideInRight rounded h-auto py-2 bg-black"
     >
       {{ message }}
       <p
@@ -396,7 +421,7 @@ onUnmounted(() => URL.revokeObjectURL(photoProfile.value));
             name="photo"
             ref="photoProfile"
             accept="image/*"
-            @change="onImageInput($event)"
+            @change="onImageInput"
             type="file"
           />
           <span v-if="imageError" class="text-red-600"
@@ -500,6 +525,8 @@ onUnmounted(() => URL.revokeObjectURL(photoProfile.value));
           <input
             type="submit"
             value="Save All"
+            :disabled="imageError"
+            :class="{ 'opacity-75 cursor-not-allowed': imageError }"
             class="w-5/6 bg-black rounded text-white py-2 cursor-pointer"
           />
         </div>

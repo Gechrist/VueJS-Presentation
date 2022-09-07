@@ -1,7 +1,7 @@
 import fb from 'firebase/compat/app';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBymzsYA5u3Y3DVxSZQpcegIAstz-TwF_s',
+  apiKey: import.meta.env.VITE_FIREBASE_API,
   authDomain: 'vuejs-presentation.firebaseapp.com',
   databaseURL:
     'https://vuejs-presentation-default-rtdb.europe-west1.firebasedatabase.app',

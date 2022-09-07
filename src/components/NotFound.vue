@@ -3,7 +3,7 @@
     <div class="absolute top-2/4">
       404|Not Found
       <a
-        href="#/"
+        href="/"
         class="flex justify-center mt-2 text-lg hover:underline hover:underline-offset-1"
         >Return to Home</a
       >

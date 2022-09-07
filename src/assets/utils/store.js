@@ -10,7 +10,6 @@ get(child(dbRef, 'Texts'))
   .then((snapshot) => {
     if (snapshot.exists()) {
       data.texts = snapshot.val();
-      console.log('app', data);
     } else {
       console.log('No data available');
     }
