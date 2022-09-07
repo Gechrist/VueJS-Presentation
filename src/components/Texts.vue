@@ -71,7 +71,9 @@ watch(
 </script>
 
 <template>
-  <div class="scrollbar-hide w-full h-[500px] text-center pt-6 overflow-y-auto">
+  <div
+    class="scrollbar-hide w-full h-[200px] md:h-[500px] text-center pt-6 overflow-y-auto"
+  >
     <h1
       v-show="animateWelcome"
       :class="{
