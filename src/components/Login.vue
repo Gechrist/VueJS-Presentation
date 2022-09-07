@@ -23,7 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="min-h-[calc(100vh_-_3rem)]">
+  <main class="min-h-[calc(100%_-_3rem)] md:min-h-[calc(100vh_-_3rem)]">
     <div id="firebaseui-auth-container"></div>
   </main>
 </template>
