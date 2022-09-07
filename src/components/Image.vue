@@ -24,29 +24,13 @@ const signOutUser = () => {
 </script>
 
 <template>
-  <div class="flex flex-col text-white">
-    <aside class="flex flex-col text-white">
-      <img
-        class="w-32 h-32 mx-auto mt-4 rounded-full md:w-72 md:h-72"
-        src="../assets/featuredImage.jpg"
-        alt="Nikolaos Mavropoulos Portrait"
-      />
-      <h4 class="text-center mt-2 text-xl">{{ name }}</h4>
-      <div class="ml-2">
-        <h4 class="text-left mt-8 underline underline-offset-2">
-          Contact Info:
-        </h4>
-        <p>{{ contactInfo }}</p>
-      </div>
-    </aside>
-  </div>
   <aside class="flex flex-col text-white min-h-[calc(100vh_-_4.5rem)]">
     <img
       class="w-32 h-32 mx-auto mt-4 rounded-full md:w-64 md:h-64"
       :src="`${
         data.texts.photo ? data.texts.photo : 'src/assets/featuredImage.jpg'
       }`"
-      alt="Nikolaos Mavropoulos Portrait"
+      :alt="`${data.texts.name} profile image`"
     />
     <div class="flex flex-col mt-2 mx-auto space-y-2">
       <a
