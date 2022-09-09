@@ -72,7 +72,7 @@ watch(
 
 <template>
   <div
-    class="scrollbar-hide w-full h-[200px] md:h-[500px] text-center pt-6 overflow-y-auto"
+    class="scrollbar-hide w-full h-[250px] md:h-[500px] text-center pt-6 overflow-y-auto"
   >
     <h1
       v-show="animateWelcome"

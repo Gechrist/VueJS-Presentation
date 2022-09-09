@@ -24,11 +24,9 @@ const signOutUser = () => {
 </script>
 
 <template>
-  <aside
-    class="flex flex-col text-white min-h-[calc(100vh_-_7rem)] md:min-h-[calc(100vh_-_3rem)]"
-  >
+  <aside class="flex flex-col text-white h-full">
     <img
-      class="w-32 h-32 mx-auto mt-4 rounded-full md:w-64 md:h-64"
+      class="w-32 h-32 mx-auto mt-4 rounded md:w-72 md:h-72"
       :src="`${
         data.texts.photo ? data.texts.photo : 'src/assets/featuredImage.jpg'
       }`"
@@ -37,7 +35,7 @@ const signOutUser = () => {
     <div class="flex flex-col mt-2 mx-auto space-y-2">
       <a
         :href="`${loggedUser ? '#/admin' : '#/login'}`"
-        class="text-sm md:text-xl"
+        class="text-center text-sm md:text-xl"
         >{{ data.texts.name }}</a
       >
       <button

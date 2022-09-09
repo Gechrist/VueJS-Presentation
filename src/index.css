@@ -4,12 +4,18 @@
 
 @layer base {
   html {
-    @apply bg-[#eeeeee] text-black text-xs xl:text-base 2xl:text-xl;
+    @apply font-body bg-[#eeeeee] text-black text-xs xl:text-base 2xl:text-xl;
   }
   body {
     @apply overflow-x-hidden;
   }
   button {
     @apply hover:bg-white hover:text-blue-900 cursor-pointer hover:ring-1 hover:ring-blue-900 hover:ring-inset;
+  }
+  @font-face {
+    font-family: Figtree;
+    font-weight: normal;
+    font-display: swap;
+    src: url('./assets/fonts/Figtree-VariableFont_wght.ttf') format('truetype');
   }
 }

@@ -41,7 +41,7 @@ const changeExcerpt = (arg) => {
 </script>
 
 <template>
-  <div class="flex flex-row">
+  <div class="flex flex-row min-h-[calc(110vh_-_3rem)]">
     <section class="w-[65%] md:w-4/6 flex flex-col">
       <Nav @changeExcerpt="changeExcerpt" />
       <Texts :displayText="excerpt" />

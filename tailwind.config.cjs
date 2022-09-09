@@ -12,7 +12,11 @@ module.exports = withAnimations({
       xl: '1280px',
       '2xl': '1536px',
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        body: ['Figtree', 'Arial'],
+      },
+    },
   },
   plugins: [require('tailwind-scrollbar-hide')],
 });

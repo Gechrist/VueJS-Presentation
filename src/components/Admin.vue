@@ -301,7 +301,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="min-h-[calc(100vh_-_4.5rem)]">
+  <main class="min-h-[calc(100vh_-_9rem)] md:min-h-[calc(100vh_-_4.5rem)]">
     <aside
       v-if="message"
       class="w-72 flex flex-row fixed justify-center top-16 right-2 z-40 text-white animate-slideInRight rounded h-auto py-2 bg-black"
