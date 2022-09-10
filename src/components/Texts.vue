@@ -3,7 +3,7 @@ import { ref, inject, watch } from 'vue';
 
 const animateWelcome = ref(true);
 const animateBio = ref(false);
-const animateCareer = ref(false);
+const animateResearch = ref(false);
 const animateEducation = ref(false);
 const animatePublications = ref(false);
 const props = defineProps(['displayText']);
@@ -16,7 +16,7 @@ const setText = () => {
       text.value = '';
       animateWelcome.value = true;
       animateBio.value = false;
-      animateCareer.value = false;
+      animateResearch.value = false;
       animateEducation.value = false;
       animatePublications.value = false;
       break;
@@ -25,16 +25,16 @@ const setText = () => {
       text.value = data.texts.bioText;
       animateWelcome.value = false;
       animateBio.value = true;
-      animateCareer.value = false;
+      animateResearch.value = false;
       animateEducation.value = false;
       animatePublications.value = false;
       break;
     }
-    case 'career': {
-      text.value = data.texts.careerText;
+    case 'research': {
+      text.value = data.texts.researchText;
       animateWelcome.value = false;
       animateBio.value = false;
-      animateCareer.value = true;
+      animateResearch.value = true;
       animateEducation.value = false;
       animatePublications.value = false;
       break;
@@ -43,7 +43,7 @@ const setText = () => {
       text.value = data.texts.educationText;
       animateWelcome.value = false;
       animateBio.value = false;
-      animateCareer.value = false;
+      animateResearch.value = false;
       animateEducation.value = true;
       animatePublications.value = false;
       break;
@@ -52,7 +52,7 @@ const setText = () => {
       text.value = data.texts.publicationsText;
       animateWelcome.value = false;
       animateBio.value = false;
-      animateCareer.value = false;
+      animateResearch.value = false;
       animateEducation.value = false;
       animatePublications.value = true;
       break;
@@ -80,13 +80,13 @@ watch(
         'animate-animated animate-fadeInDown animate-delay-[1.5s]':
           animateWelcome,
       }"
-      class="text-2xl font-semibold whitespace-pre-wrap"
+      class="whitespace-pre-wrap"
     >
       {{ data.texts.welcomeText }}
     </h1>
     <p
       :class="`${
-        animateBio || animateCareer || animateEducation || animatePublications
+        animateBio || animateResearch || animateEducation || animatePublications
           ? 'animate-animated animate-fadeInDown animate-delay-[0.5s]'
           : ''
       }`"

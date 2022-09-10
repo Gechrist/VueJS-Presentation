@@ -14,11 +14,11 @@ const changeExcerpt = (arg) => {
       excerpt.value = 'bio';
     }
   }
-  if (arg == 'Career') {
-    if (excerpt.value == 'career') {
+  if (arg == 'Research') {
+    if (excerpt.value == 'research') {
       excerpt.value = 'welcome';
     } else {
-      excerpt.value = 'career';
+      excerpt.value = 'research';
     }
   }
 

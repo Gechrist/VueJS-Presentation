@@ -12,7 +12,8 @@
     "firebase": "^9.9.3",
     "firebaseui": "^6.0.1",
     "tailwind-scrollbar-hide": "^1.1.7",
-    "vue": "^3.2.37"
+    "vue": "^3.2.37",
+    "vue-tel-input": "^6.0.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.3",

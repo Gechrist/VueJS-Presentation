@@ -1,5 +1,7 @@
 <script setup>
 import { ref, onUnmounted, reactive, watch } from 'vue';
+import { VueTelInput } from 'vue-tel-input';
+import 'vue-tel-input/dist/vue-tel-input.css';
 import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
 import { getDatabase, ref as dbref, set, get, child } from 'firebase/database';
 import {
@@ -14,7 +16,7 @@ const contact = ref(false);
 const welcome = ref(false);
 const bio = ref(false);
 const education = ref(false);
-const career = ref(false);
+const research = ref(false);
 const publications = ref(false);
 const showSaveButton = ref(false);
 const showSpinner = ref(false);
@@ -26,7 +28,7 @@ const email2 = ref();
 const address = ref();
 const bioText = ref();
 const educationText = ref();
-const careerText = ref();
+const researchText = ref();
 const publicationsText = ref();
 const welcomeText = ref();
 const facebook = ref();
@@ -70,7 +72,7 @@ get(child(dbRef, 'Texts'))
       address.value = data.texts.address;
       bioText.value = data.texts.bioText;
       educationText.value = data.texts.educationText;
-      careerText.value = data.texts.careerText;
+      researchText.value = data.texts.researchText;
       publicationsText.value = data.texts.publicationsText;
       welcomeText.value = data.texts.welcomeText;
       facebook.value = data.texts.facebook;
@@ -89,8 +91,8 @@ const buttons = [
   'Welcome',
   'Bio',
   'Education',
-  'Career',
   'Publications',
+  'Research',
 ];
 
 const state = (arg) => {
@@ -99,7 +101,7 @@ const state = (arg) => {
     contact.value = !contact.value;
     welcome.value = false;
     bio.value = false;
-    career.value = false;
+    research.value = false;
     education.value = false;
     publications.value = false;
     if (!contact.value) {
@@ -113,7 +115,7 @@ const state = (arg) => {
     contact.value = false;
     welcome.value = !welcome.value;
     bio.value = false;
-    career.value = false;
+    research.value = false;
     education.value = false;
     publications.value = false;
     if (!welcome.value) {
@@ -127,7 +129,7 @@ const state = (arg) => {
     contact.value = false;
     welcome.value = false;
     bio.value = !bio.value;
-    career.value = false;
+    research.value = false;
     education.value = false;
     publications.value = false;
     if (!bio.value) {
@@ -136,15 +138,15 @@ const state = (arg) => {
       showSaveButton.value = true;
     }
   }
-  if (arg == 'Career') {
+  if (arg == 'Research') {
     showSpinner.value = false;
     contact.value = false;
     welcome.value = false;
     bio.value = false;
-    career.value = !career.value;
+    research.value = !research.value;
     education.value = false;
     publications.value = false;
-    if (!career.value) {
+    if (!research.value) {
       showSaveButton.value = false;
     } else {
       showSaveButton.value = true;
@@ -155,7 +157,7 @@ const state = (arg) => {
     contact.value = false;
     welcome.value = false;
     bio.value = false;
-    career.value = false;
+    research.value = false;
     education.value = !education.value;
     publications.value = false;
     if (!education.value) {
@@ -170,7 +172,7 @@ const state = (arg) => {
     showSaveButton.value = !showSaveButton.value;
     welcome.value = false;
     bio.value = false;
-    career.value = false;
+    research.value = false;
     education.value = false;
     publications.value = !publications.value;
     if (!publications.value) {
@@ -218,7 +220,7 @@ const saveToDB = () => {
     tel: tel.value,
     bioText: bioText.value,
     educationText: educationText.value,
-    careerText: careerText.value,
+    researchText: researchText.value,
     publicationsText: publicationsText.value,
     welcomeText: welcomeText.value,
   })
@@ -452,12 +454,12 @@ onUnmounted(() => {
             type="email"
           />
           <label for="tel">Telephone:</label>
-          <input
+          <vue-tel-input
             id="tel"
             name="tel"
-            v-model.number="tel"
+            mode="international"
+            v-model="tel"
             class="bg-transparent border-2 border-black"
-            type="tel"
           />
           <label for="fb">Facebook:</label>
           <input
@@ -503,12 +505,12 @@ onUnmounted(() => {
             class="bg-transparent border-2 border-black w-full h-[250px]"
           />
         </div>
-        <div v-show="career" class="flex flex-col space-y-3 px-1">
-          <label for="career">Career Text:</label>
+        <div v-show="research" class="flex flex-col space-y-3 px-1">
+          <label for="research">Research Text:</label>
           <textarea
-            id="career"
-            name="career"
-            v-model="careerText"
+            id="research"
+            name="research"
+            v-model="researchText"
             class="bg-transparent border-2 border-black w-full h-[250px]"
           />
         </div>

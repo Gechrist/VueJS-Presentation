@@ -1,12 +1,12 @@
 <script setup>
 const icons = [
   { text: 'Bio', alt: 'NM bio' },
-  { text: 'Career', alt: 'NM career' },
   { text: 'Education', alt: 'NM education' },
   {
     text: 'Publications',
     alt: 'NM publications',
   },
+  { text: 'Research', alt: 'NM research' },
 ];
 </script>
 
