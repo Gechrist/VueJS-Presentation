@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onUnmounted, reactive, watch } from 'vue';
 import { VueTelInput } from 'vue-tel-input';
-import 'vue-tel-input/dist/vue-tel-input.css';
 import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
 import { getDatabase, ref as dbref, set, get, child } from 'firebase/database';
 import {
@@ -10,6 +9,8 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from 'firebase/storage';
+import { VueEditor } from 'vue3-editor';
+import 'vue-tel-input/dist/vue-tel-input.css';
 
 const data = reactive({ texts: {} });
 const contact = ref(false);
@@ -39,6 +40,20 @@ const loggedUser = ref(false);
 const photoProfile = ref(null);
 const imageError = ref(false);
 const imageFile = reactive({ file: {} });
+const editorCustomToolbar = [
+  ['bold', 'italic', 'underline', 'strike'],
+  ['blockquote', 'code-block'],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  [{ script: 'sub' }, { script: 'super' }],
+  [{ indent: '-1' }, { indent: '+1' }],
+  [{ direction: 'rtl' }],
+  [{ size: ['small', false, 'large', 'huge'] }],
+  [{ color: [] }, { background: [] }],
+  [{ font: [] }],
+  [{ align: [] }],
+
+  ['clean'],
+];
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -480,47 +495,52 @@ onUnmounted(() => {
         </div>
         <div v-show="welcome" class="flex flex-col space-y-3 px-1">
           <label for="welcome">Welcoming Text:</label>
-          <textarea
+          <vue-editor
+            :editor-toolbar="editorCustomToolbar"
             id="welcome"
             name="welcome"
             v-model="welcomeText"
-            class="bg-transparent border-2 border-black w-full h-[250px]"
+            class="bg-transparent border-2 border-black w-full h-full"
           />
         </div>
         <div v-show="bio" class="flex flex-col space-y-3 px-1">
           <label for="bio">Bio Text:</label>
-          <textarea
+          <vue-editor
+            :editor-toolbar="editorCustomToolbar"
             id="bio"
             name="bio"
             v-model="bioText"
-            class="bg-transparent border-2 border-black w-full h-[250px]"
+            class="bg-transparent border-2 border-black w-full h-full"
           />
         </div>
         <div v-show="education" class="flex flex-col space-y-3 px-1">
           <label for="education">Education Text:</label>
-          <textarea
+          <vue-editor
+            :editor-toolbar="editorCustomToolbar"
             id="education"
             name="education"
             v-model="educationText"
-            class="bg-transparent border-2 border-black w-full h-[250px]"
+            class="bg-transparent border-2 border-black w-full h-full"
           />
         </div>
         <div v-show="research" class="flex flex-col space-y-3 px-1">
           <label for="research">Research Text:</label>
-          <textarea
+          <vue-editor
+            :editor-toolbar="editorCustomToolbar"
             id="research"
             name="research"
             v-model="researchText"
-            class="bg-transparent border-2 border-black w-full h-[250px]"
+            class="bg-transparent border-2 border-black w-full h-full"
           />
         </div>
         <div v-show="publications" class="flex flex-col space-y-3">
           <label for="publications">Publications Text:</label>
-          <textarea
+          <vue-editor
+            :editor-toolbar="editorCustomToolbar"
             id="publications"
             name="publications"
             v-model="publicationsText"
-            class="bg-transparent border-2 border-black w-full h-[250px]"
+            class="bg-transparent border-2 border-black w-full h-full"
           />
         </div>
         <div v-show="showSaveButton" class="flex justify-center mt-2">
