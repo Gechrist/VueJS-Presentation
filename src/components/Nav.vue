@@ -19,7 +19,7 @@ const icons = [
       :key="index"
       @click="$emit('changeExcerpt', icon.text)"
       :class="`${
-        index === 3 ? 'w-20' : 'w-16'
+        index === 2 ? 'w-20' : 'w-16'
       } h-12 bg-[#212834] mix-blend-hard-light ring-1 ring-white ring-inset text-white text-xs md:w-20 md:h-20 rounded cursor-pointer hover:scale-110 animate-animated animate-fadeInLeft ${
         index === 0
           ? 'animate-delay-[0.3s]'
