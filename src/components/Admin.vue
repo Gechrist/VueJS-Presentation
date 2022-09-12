@@ -326,7 +326,7 @@ onUnmounted(() => {
       {{ message }}
       <p
         @click="clearMessage"
-        class="text-xs relative ring-1 ring-white rounded-full cursor-pointer justify-center items-end flex w-3 h-3 -right-2"
+        class="text-xs relative ring-1 ring-white rounded-full cursor-pointer justify-center items-center pb-0.5 flex w-3 h-3 -right-2"
       >
         x
       </p>
