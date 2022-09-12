@@ -28,7 +28,7 @@ const signOutUser = () => {
     <img
       class="w-32 h-32 mx-auto mt-4 rounded md:w-72 md:h-72"
       :src="`${
-        data.texts.photo ? data.texts.photo : 'src/assets/featuredImage.jpg'
+        data.texts.photo ? data.texts.photo : 'src/assets/featuredImage.jpeg'
       }`"
       :alt="`${data.texts.name} profile image`"
     />
