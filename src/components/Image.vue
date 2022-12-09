@@ -131,9 +131,7 @@ const signOutUser = () => {
             clip-rule="evenodd"
           />
         </svg>
-        <a :href="data.texts.facebook" class="md:text-base">
-          Facebook Profile</a
-        >
+        <a :href="data.texts.facebook" class="md:text-base"> Profile</a>
       </div>
       <div
         v-if="data.texts.linkedIn"
@@ -168,7 +166,7 @@ const signOutUser = () => {
             />
           </g>
         </svg>
-        <a :href="data.texts.linkedIn" class="md:text-base">linkedIn Profile</a>
+        <a :href="data.texts.linkedIn" class="md:text-base">Profile</a>
       </div>
     </div>
   </aside>
