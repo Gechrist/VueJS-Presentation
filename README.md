@@ -2,11 +2,11 @@
 
 ## OVERVIEW
 
-This is a personal website built with [Vue.JS](https://vuejs.org/) and [TailwindCSS](https://tailwindcss.com/), deployed with [Vercel](https://next-js-imdb.vercel.app). The data is hosted on Google Firebase Realtime Database.
+This is a personal website built with [Vue.JS](https://vuejs.org/) and [TailwindCSS](https://tailwindcss.com/), deployed with [Vercel](https://next-js-imdb.vercel.app). The data is hosted on a Google Firebase Realtime Database.
 
 ## INSTALL INSTRUCTIONS
 
-A working installation of Next.JS is required. Just clone the repository and run npm install & npm run dev:
+Just clone the repository and run npm install & npm run dev:
 
 ```
 git clone https://github.com/Gechrist/VueJS-Presentation.git
