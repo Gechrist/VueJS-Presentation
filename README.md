@@ -2,7 +2,7 @@
 
 ## OVERVIEW
 
-This is a personal website built with [Vue.JS](https://vuejs.org/) and [TailwindCSS](https://tailwindcss.com/), deployed with [Vercel](https://next-js-imdb.vercel.app). The data is hosted on a Google Firebase Realtime Database.
+This is a personal website built with [Vue.JS](https://vuejs.org/) and [TailwindCSS](https://tailwindcss.com/), deployed with [Vercel](https://vercel.com/). The data is hosted on a Google Firebase Realtime Database.
 
 ## INSTALL INSTRUCTIONS
 

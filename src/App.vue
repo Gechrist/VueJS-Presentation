@@ -31,6 +31,7 @@ const currentView = computed(() => {
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" :content="`Home page of ${data.texts.name}`" />
+    <link rel="canonical" href="/" />
     <meta property="og:title" content="{{data.texts.name}}" />
     <meta
       property="og:description"

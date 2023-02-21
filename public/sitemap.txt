@@ -1,0 +1,3 @@
+https://dr-nikolaosmavropoulos.vercel.app/
+https://dr-nikolaosmavropoulos.vercel.app/#/admin
+https://dr-nikolaosmavropoulos.vercel.app/#/login
