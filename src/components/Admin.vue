@@ -1,320 +1,329 @@
 <script setup>
-import { ref, onUnmounted, reactive, watch } from 'vue';
-import { VueTelInput } from 'vue-tel-input';
-import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
-import { getDatabase, ref as dbref, set, get, child } from 'firebase/database';
-import {
-  getStorage,
-  ref as stref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from 'firebase/storage';
-import { VueEditor } from 'vue3-editor';
-import 'vue-tel-input/dist/vue-tel-input.css';
+  import { ref, onUnmounted, reactive, watch } from "vue";
+  import { VueTelInput } from "vue-tel-input";
+  import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+  import {
+    getDatabase,
+    ref as dbref,
+    set,
+    get,
+    child,
+  } from "firebase/database";
+  import {
+    getStorage,
+    ref as stref,
+    uploadBytesResumable,
+    getDownloadURL,
+  } from "firebase/storage";
+  import { VueEditor } from "vue3-editor";
+  import "vue-tel-input/dist/vue-tel-input.css";
 
-const data = reactive({ texts: {} });
-const contact = ref(false);
-const welcome = ref(false);
-const bio = ref(false);
-const education = ref(false);
-const research = ref(false);
-const publications = ref(false);
-const showSaveButton = ref(false);
-const showSpinner = ref(false);
-const name = ref('');
-const photo = ref();
-const tel = ref();
-const email = ref();
-const email2 = ref();
-const address = ref();
-const bioText = ref();
-const educationText = ref();
-const researchText = ref();
-const publicationsText = ref();
-const welcomeText = ref();
-const facebook = ref();
-const linkedIn = ref();
-const message = ref('');
-const auth = getAuth();
-const loggedUser = ref(false);
-const photoProfile = ref(null);
-const imageError = ref(false);
-const imageFile = reactive({ file: {} });
-const editorCustomToolbar = [
-  ['bold', 'italic', 'underline', 'strike'],
-  ['blockquote', 'code-block'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  [{ script: 'sub' }, { script: 'super' }],
-  [{ indent: '-1' }, { indent: '+1' }],
-  [{ direction: 'rtl' }],
-  [{ size: ['small', false, 'large', 'huge'] }],
-  [{ color: [] }, { background: [] }],
-  [{ font: [] }],
-  [{ align: [] }],
+  const data = reactive({ texts: {} });
+  const contact = ref(false);
+  const welcome = ref(false);
+  const bio = ref(false);
+  const education = ref(false);
+  const research = ref(false);
+  const publications = ref(false);
+  const showSaveButton = ref(false);
+  const showSpinner = ref(false);
+  const name = ref("");
+  const photo = ref();
+  const tel = ref();
+  const email = ref();
+  const email2 = ref();
+  const address = ref();
+  const bioText = ref();
+  const educationText = ref();
+  const researchText = ref();
+  const publicationsText = ref();
+  const welcomeText = ref();
+  const facebook = ref();
+  const linkedIn = ref();
+  const message = ref("");
+  const auth = getAuth();
+  const loggedUser = ref(false);
+  const photoProfile = ref(null);
+  const imageError = ref(false);
+  const imageFile = reactive({ file: {} });
+  const editorCustomToolbar = [
+    ["bold", "italic", "underline", "strike"],
+    ["blockquote", "code-block"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ script: "sub" }, { script: "super" }],
+    [{ indent: "-1" }, { indent: "+1" }],
+    [{ direction: "rtl" }],
+    [{ size: ["small", false, "large", "huge"] }],
+    [{ color: [] }, { background: [] }],
+    [{ font: [] }],
+    [{ align: [] }],
 
-  ['clean'],
-];
+    ["clean"],
+  ];
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    loggedUser.value = true;
-  } else {
-    return (window.location.href = '/');
-  }
-});
-
-// hide alert after 3 seconds
-const alertTimeout = () =>
-  setTimeout(() => {
-    message.value = '';
-  }, 4000);
-
-watch(message, (message, previousMessage) => {
-  alertTimeout();
-});
-
-//db data
-const dbRef = dbref(getDatabase());
-get(child(dbRef, 'Texts'))
-  .then((snapshot) => {
-    if (snapshot.exists()) {
-      data.texts = snapshot.val();
-      name.value = data.texts.name;
-      tel.value = data.texts.tel;
-      photo.value = data.texts.photo;
-      email.value = data.texts.email;
-      email2.value = data.texts.email2;
-      address.value = data.texts.address;
-      bioText.value = data.texts.bioText;
-      educationText.value = data.texts.educationText;
-      researchText.value = data.texts.researchText;
-      publicationsText.value = data.texts.publicationsText;
-      welcomeText.value = data.texts.welcomeText;
-      facebook.value = data.texts.facebook;
-      linkedIn.value = data.texts.linkedIn;
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loggedUser.value = true;
     } else {
-      message.value = 'No data available';
+      return (window.location.href = "/");
     }
-  })
-  .catch((error) => {
-    console.error(error);
-    message.value = 'Something went wrong. Please try again.';
   });
 
-const buttons = [
-  'Contact',
-  'Welcome',
-  'Bio',
-  'Education',
-  'Publications',
-  'Research',
-];
+  // hide alert after 3 seconds
+  const alertTimeout = () =>
+    setTimeout(() => {
+      message.value = "";
+    }, 4000);
 
-const state = (arg) => {
-  if (arg == 'Contact') {
-    showSpinner.value = false;
-    contact.value = !contact.value;
-    welcome.value = false;
-    bio.value = false;
-    research.value = false;
-    education.value = false;
-    publications.value = false;
-    if (!contact.value) {
-      showSaveButton.value = false;
-    } else {
-      showSaveButton.value = true;
-    }
-  }
-  if (arg == 'Welcome') {
-    showSpinner.value = false;
-    contact.value = false;
-    welcome.value = !welcome.value;
-    bio.value = false;
-    research.value = false;
-    education.value = false;
-    publications.value = false;
-    if (!welcome.value) {
-      showSaveButton.value = false;
-    } else {
-      showSaveButton.value = true;
-    }
-  }
-  if (arg == 'Bio') {
-    showSpinner.value = false;
-    contact.value = false;
-    welcome.value = false;
-    bio.value = !bio.value;
-    research.value = false;
-    education.value = false;
-    publications.value = false;
-    if (!bio.value) {
-      showSaveButton.value = false;
-    } else {
-      showSaveButton.value = true;
-    }
-  }
-  if (arg == 'Research') {
-    showSpinner.value = false;
-    contact.value = false;
-    welcome.value = false;
-    bio.value = false;
-    research.value = !research.value;
-    education.value = false;
-    publications.value = false;
-    if (!research.value) {
-      showSaveButton.value = false;
-    } else {
-      showSaveButton.value = true;
-    }
-  }
-  if (arg == 'Education') {
-    showSpinner.value = false;
-    contact.value = false;
-    welcome.value = false;
-    bio.value = false;
-    research.value = false;
-    education.value = !education.value;
-    publications.value = false;
-    if (!education.value) {
-      showSaveButton.value = false;
-    } else {
-      showSaveButton.value = true;
-    }
-  }
-  if (arg == 'Publications') {
-    showSpinner.value = false;
-    contact.value = false;
-    showSaveButton.value = !showSaveButton.value;
-    welcome.value = false;
-    bio.value = false;
-    research.value = false;
-    education.value = false;
-    publications.value = !publications.value;
-    if (!publications.value) {
-      showSaveButton.value = false;
-    } else {
-      showSaveButton.value = true;
-    }
-  }
-};
+  watch(message, (message, previousMessage) => {
+    alertTimeout();
+  });
 
-const onImageInput = (e) => {
-  if (!e.target.files.length) return;
-  imageFile.file = e.target.files[0];
-  photo.value = URL.createObjectURL(e.target.files[0]);
-
-  if (
-    !['svg', 'jpeg', 'png', 'bmp', 'webp', 'jpg'].includes(
-      e.target.files[0].name.split('.').pop()
-    )
-  ) {
-    imageError.value = true;
-  } else {
-    imageError.value = false;
-  }
-};
-
-const removeImage = (e) => {
-  imageError.value = false;
-  photo.value = null;
-  photoProfile.value.value = null;
-  imageFile.file = null;
-};
-
-const saveToDB = () => {
-  //save to db
-  const db = getDatabase();
-  set(dbref(db, 'Texts/'), {
-    name: name.value,
-    email: email.value,
-    photo: photo.value,
-    address: address.value,
-    email2: email2.value,
-    facebook: facebook.value,
-    linkedIn: linkedIn.value,
-    tel: tel.value,
-    bioText: bioText.value,
-    educationText: educationText.value,
-    researchText: researchText.value,
-    publicationsText: publicationsText.value,
-    welcomeText: welcomeText.value,
-  })
-    .then(() => {
-      showSaveButton.value = true;
-      showSpinner.value = false;
-      message.value = 'Saved Successfully!';
-    })
-    .catch((error) => {
-      console.log(error.message);
-      showSaveButton.value = true;
-      showSpinner.value = false;
-      message.value = 'Something went wrong. Please try again.';
-    });
-};
-
-const onSubmit = () => {
-  showSaveButton.value = false;
-  showSpinner.value = true;
-
-  if (photoProfile.value.value) {
-    //upload image
-    const storage = getStorage();
-    const imageRef = stref(storage, imageFile.file.name);
-    const uploadTask = uploadBytesResumable(imageRef, imageFile.file);
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        switch (snapshot.state) {
-          case 'paused':
-            console.log('Upload is paused');
-            break;
-          case 'running':
-            console.log('Upload is running');
-            break;
-        }
-      },
-      (error) => {
-        showSaveButton.value = true;
-        showSpinner.value = false;
-        console.log(error.message);
-        message.value = 'Something went wrong. Please try again.';
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          photo.value = downloadURL;
-          saveToDB();
-        });
+  //db data
+  const dbRef = dbref(getDatabase());
+  get(child(dbRef, "Texts"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        data.texts = snapshot.val();
+        name.value = data.texts.name;
+        tel.value = data.texts.tel;
+        photo.value = data.texts.photo;
+        email.value = data.texts.email;
+        email2.value = data.texts.email2;
+        address.value = data.texts.address;
+        bioText.value = data.texts.bioText;
+        educationText.value = data.texts.educationText;
+        researchText.value = data.texts.researchText;
+        publicationsText.value = data.texts.publicationsText;
+        welcomeText.value = data.texts.welcomeText;
+        facebook.value = data.texts.facebook;
+        linkedIn.value = data.texts.linkedIn;
+      } else {
+        message.value = "No data available";
       }
-    );
-  } else {
-    saveToDB();
-  }
-};
-
-const clearMessage = () => {
-  message.value = '';
-};
-
-const signOutUser = () => {
-  signOut(auth)
-    .then(() => {
-      message.value = 'You have been signed out';
     })
     .catch((error) => {
-      console.log(error.message);
-      message.value = 'An error occured. Please contact the administrator';
+      console.error(error);
+      message.value = "Something went wrong. Please try again.";
     });
-};
 
-onUnmounted(() => {
-  URL.revokeObjectURL(photoProfile.value);
-  clearTimeout(alertTimeout);
-});
+  const buttons = [
+    "Contact",
+    "Welcome",
+    "Bio",
+    "Education",
+    "Publications",
+    "Research",
+  ];
+
+  const state = (arg) => {
+    if (arg == "Contact") {
+      showSpinner.value = false;
+      contact.value = !contact.value;
+      welcome.value = false;
+      bio.value = false;
+      research.value = false;
+      education.value = false;
+      publications.value = false;
+      if (!contact.value) {
+        showSaveButton.value = false;
+      } else {
+        showSaveButton.value = true;
+      }
+    }
+    if (arg == "Welcome") {
+      showSpinner.value = false;
+      contact.value = false;
+      welcome.value = !welcome.value;
+      bio.value = false;
+      research.value = false;
+      education.value = false;
+      publications.value = false;
+      if (!welcome.value) {
+        showSaveButton.value = false;
+      } else {
+        showSaveButton.value = true;
+      }
+    }
+    if (arg == "Bio") {
+      showSpinner.value = false;
+      contact.value = false;
+      welcome.value = false;
+      bio.value = !bio.value;
+      research.value = false;
+      education.value = false;
+      publications.value = false;
+      if (!bio.value) {
+        showSaveButton.value = false;
+      } else {
+        showSaveButton.value = true;
+      }
+    }
+    if (arg == "Research") {
+      showSpinner.value = false;
+      contact.value = false;
+      welcome.value = false;
+      bio.value = false;
+      research.value = !research.value;
+      education.value = false;
+      publications.value = false;
+      if (!research.value) {
+        showSaveButton.value = false;
+      } else {
+        showSaveButton.value = true;
+      }
+    }
+    if (arg == "Education") {
+      showSpinner.value = false;
+      contact.value = false;
+      welcome.value = false;
+      bio.value = false;
+      research.value = false;
+      education.value = !education.value;
+      publications.value = false;
+      if (!education.value) {
+        showSaveButton.value = false;
+      } else {
+        showSaveButton.value = true;
+      }
+    }
+    if (arg == "Publications") {
+      showSpinner.value = false;
+      contact.value = false;
+      showSaveButton.value = !showSaveButton.value;
+      welcome.value = false;
+      bio.value = false;
+      research.value = false;
+      education.value = false;
+      publications.value = !publications.value;
+      if (!publications.value) {
+        showSaveButton.value = false;
+      } else {
+        showSaveButton.value = true;
+      }
+    }
+  };
+
+  const onImageInput = (e) => {
+    if (!e.target.files.length) return;
+    imageFile.file = e.target.files[0];
+    photo.value = URL.createObjectURL(e.target.files[0]);
+
+    if (
+      !["svg", "jpeg", "png", "bmp", "webp", "jpg"].includes(
+        e.target.files[0].name.split(".").pop(),
+      )
+    ) {
+      imageError.value = true;
+    } else {
+      imageError.value = false;
+    }
+  };
+
+  const removeImage = (e) => {
+    imageError.value = false;
+    photo.value = null;
+    photoProfile.value.value = null;
+    imageFile.file = null;
+  };
+
+  const saveToDB = async () => {
+    //save to db
+    try {
+      const db = getDatabase();
+      const result = await set(dbref(db, "Texts/"), {
+        name: name.value,
+        email: email.value,
+        // photo: photo.value,
+        address: address.value,
+        email2: email2.value,
+        facebook: facebook.value,
+        linkedIn: linkedIn.value,
+        tel: tel.value,
+        bioText: bioText.value,
+        educationText: educationText.value,
+        researchText: researchText.value,
+        publicationsText: publicationsText.value,
+        welcomeText: welcomeText.value,
+      });
+      if (result) {
+        console.log(result);
+      }
+      showSaveButton.value = true;
+      showSpinner.value = false;
+      message.value = "Saved Successfully!";
+    } catch (error) {
+      console.log(error.message);
+      showSaveButton.value = true;
+      showSpinner.value = false;
+      message.value = "Something went wrong. Please try again.";
+    }
+  };
+
+  const onSubmit = () => {
+    showSaveButton.value = false;
+    showSpinner.value = true;
+    saveToDB();
+
+    // if (photoProfile.value.value) {
+    //   //upload image
+    //   const storage = getStorage();
+    //   const imageRef = stref(storage, imageFile.file.name);
+    //   const uploadTask = uploadBytesResumable(imageRef, imageFile.file);
+    //   uploadTask.on(
+    //     'state_changed',
+    //     (snapshot) => {
+    //       // Observe state change events such as progress, pause, and resume
+    //       // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+    //       const progress =
+    //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //       console.log('Upload is ' + progress + '% done');
+    //       switch (snapshot.state) {
+    //         case 'paused':
+    //           console.log('Upload is paused');
+    //           break;
+    //         case 'running':
+    //           console.log('Upload is running');
+    //           break;
+    //       }
+    //     },
+    //     (error) => {
+    //       showSaveButton.value = true;
+    //       showSpinner.value = false;
+    //       console.log(error.message);
+    //       message.value = 'Something went wrong. Please try again.';
+    //     },
+    //     () => {
+    //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+    //         photo.value = downloadURL;
+    //         saveToDB();
+    //       });
+    //     }
+    //   );
+    // } else {
+    //   saveToDB();
+    // }
+  };
+
+  const clearMessage = () => {
+    message.value = "";
+  };
+
+  const signOutUser = () => {
+    signOut(auth)
+      .then(() => {
+        message.value = "You have been signed out";
+      })
+      .catch((error) => {
+        console.log(error.message);
+        message.value = "An error occured. Please contact the administrator";
+      });
+  };
+
+  onUnmounted(() => {
+    URL.revokeObjectURL(photoProfile.value);
+    clearTimeout(alertTimeout);
+  });
 </script>
 
 <template>
