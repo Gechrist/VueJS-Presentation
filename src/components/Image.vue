@@ -1,7 +1,7 @@
 <script setup>
   import { ref, inject } from "vue";
   import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-  import PlaceHolder from "../assets/featuredImage.jpg";
+  import PlaceHolder from "../assets/featuredImage.jpeg";
 
   const data = inject("texts");
   const loggedUser = ref(false);

@@ -11,7 +11,7 @@
   } from "firebase/database";
   import { VueEditor } from "vue3-editor";
   import "vue-tel-input/dist/vue-tel-input.css";
-  import PlaceHolder from "../assets/featuredImage.jpg";
+  import PlaceHolder from "../assets/featuredImage.jpeg";
 
   const API_BASE = import.meta.env.DEV
     ? "/api-upload"
