@@ -1,34 +1,34 @@
 <script setup>
-import { ref, inject } from 'vue';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+  import { ref, inject } from "vue";
+  import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
-const data = inject('texts');
-const loggedUser = ref(false);
-const auth = getAuth();
+  const data = inject("texts");
+  const loggedUser = ref(false);
+  const auth = getAuth();
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    loggedUser.value = true;
-  }
-});
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loggedUser.value = true;
+    }
+  });
 
-const signOutUser = () => {
-  signOut(auth)
-    .then(() => {
-      loggedUser.value = false;
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
-};
+  const signOutUser = () => {
+    signOut(auth)
+      .then(() => {
+        loggedUser.value = false;
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
 </script>
 
 <template>
   <aside class="flex flex-col text-white h-full">
     <img
-      class="w-32 h-32 mx-auto mt-4 rounded md:w-72 md:h-72"
+      class="w-32 h-40 mx-auto mt-4 rounded md:w-72 md:h-96"
       :src="`${
-        data.texts.photo ? data.texts.photo : 'src/assets/featuredImage.jpeg'
+        data.texts.photo ? data.texts.photo : 'src/assets/featuredImage.jpg'
       }`"
       :alt="`${data.texts.name} profile image`"
     />

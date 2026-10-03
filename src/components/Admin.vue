@@ -9,15 +9,12 @@
     get,
     child,
   } from "firebase/database";
-  import {
-    getStorage,
-    ref as stref,
-    uploadBytesResumable,
-    getDownloadURL,
-  } from "firebase/storage";
   import { VueEditor } from "vue3-editor";
   import "vue-tel-input/dist/vue-tel-input.css";
 
+  const API_BASE = import.meta.env.DEV
+    ? "/api-upload"
+    : "https://freeimage.host/api/1/upload/";
   const data = reactive({ texts: {} });
   const contact = ref(false);
   const welcome = ref(false);
@@ -44,6 +41,7 @@
   const auth = getAuth();
   const loggedUser = ref(false);
   const photoProfile = ref(null);
+  const photoURL = ref("");
   const imageError = ref(false);
   const imageFile = reactive({ file: {} });
   const editorCustomToolbar = [
@@ -204,10 +202,24 @@
     }
   };
 
-  const onImageInput = (e) => {
+  const readFileAsBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      // Resolve the promise when loading succeeds
+      reader.onload = () => resolve(reader.result);
+      // Reject the promise if an error occurs
+      reader.onerror = () => reject(reader.error);
+
+      reader.readAsDataURL(file);
+    });
+  };
+  let cleanphoto = null;
+  const onImageInput = async (e) => {
     if (!e.target.files.length) return;
     imageFile.file = e.target.files[0];
-    photo.value = URL.createObjectURL(e.target.files[0]);
+    photo.value = await readFileAsBase64(imageFile.file);
+    cleanphoto = photo.value.split(",")[1];
 
     if (
       !["svg", "jpeg", "png", "bmp", "webp", "jpg"].includes(
@@ -234,7 +246,7 @@
       const result = await set(dbref(db, "Texts/"), {
         name: name.value,
         email: email.value,
-        // photo: photo.value,
+        photo: photoURL.value,
         address: address.value,
         email2: email2.value,
         facebook: facebook.value,
@@ -260,49 +272,34 @@
     }
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     showSaveButton.value = false;
     showSpinner.value = true;
-    saveToDB();
 
-    // if (photoProfile.value.value) {
-    //   //upload image
-    //   const storage = getStorage();
-    //   const imageRef = stref(storage, imageFile.file.name);
-    //   const uploadTask = uploadBytesResumable(imageRef, imageFile.file);
-    //   uploadTask.on(
-    //     'state_changed',
-    //     (snapshot) => {
-    //       // Observe state change events such as progress, pause, and resume
-    //       // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-    //       const progress =
-    //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //       console.log('Upload is ' + progress + '% done');
-    //       switch (snapshot.state) {
-    //         case 'paused':
-    //           console.log('Upload is paused');
-    //           break;
-    //         case 'running':
-    //           console.log('Upload is running');
-    //           break;
-    //       }
-    //     },
-    //     (error) => {
-    //       showSaveButton.value = true;
-    //       showSpinner.value = false;
-    //       console.log(error.message);
-    //       message.value = 'Something went wrong. Please try again.';
-    //     },
-    //     () => {
-    //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    //         photo.value = downloadURL;
-    //         saveToDB();
-    //       });
-    //     }
-    //   );
-    // } else {
-    //   saveToDB();
-    // }
+    if (photoProfile.value.value) {
+      //upload image
+      const formData = new FormData();
+      formData.append("source", photo.value.split(",")[1]);
+      formData.append("key", "6d207e02198a847aa98d0a2a901485a5");
+      formData.append("format", "json");
+      try {
+        const uploadPhoto = await fetch(`${API_BASE}`, {
+          method: "POST",
+          body: formData,
+        });
+        const uploadPhotoResponse = await uploadPhoto.json();
+        photoURL.value = uploadPhotoResponse.image.display_url;
+      } catch (error) {
+        console.log(error.message);
+        showSaveButton.value = true;
+        showSpinner.value = false;
+        message.value = "Something went wrong. Please try again.";
+      }
+
+      saveToDB();
+    } else {
+      saveToDB();
+    }
   };
 
   const clearMessage = () => {
@@ -370,7 +367,7 @@
             <img
               :src="`${photo ? photo : data.texts.photo}`"
               alt="edit profile image"
-              class="w-72 h-72"
+              class="w-72 h-96"
             />
             <svg
               class="w-6 h-6 cursor-pointer -right-2 top-1 relative"
