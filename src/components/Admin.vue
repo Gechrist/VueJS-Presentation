@@ -246,7 +246,11 @@
       const result = await set(dbref(db, "Texts/"), {
         name: name.value,
         email: email.value,
-        photo: photoURL.value,
+        photo: photoURL.value
+          ? photoURL.value
+          : data.texts.photo
+            ? data.texts.photo
+            : "src/assets/featuredImage.jpg",
         address: address.value,
         email2: email2.value,
         facebook: facebook.value,
