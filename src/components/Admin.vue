@@ -11,6 +11,7 @@
   } from "firebase/database";
   import { VueEditor } from "vue3-editor";
   import "vue-tel-input/dist/vue-tel-input.css";
+  import PlaceHolder from "../assets/featuredImage.jpg";
 
   const API_BASE = import.meta.env.DEV
     ? "/api-upload"
@@ -250,7 +251,7 @@
           ? photoURL.value
           : data.texts.photo
             ? data.texts.photo
-            : "src/assets/featuredImage.jpg",
+            : PlaceHolder,
         address: address.value,
         email2: email2.value,
         facebook: facebook.value,

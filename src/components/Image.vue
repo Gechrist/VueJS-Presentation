@@ -1,6 +1,7 @@
 <script setup>
   import { ref, inject } from "vue";
   import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+  import PlaceHolder from "../assets/featuredImage.jpg";
 
   const data = inject("texts");
   const loggedUser = ref(false);
@@ -27,9 +28,7 @@
   <aside class="flex flex-col text-white h-full">
     <img
       class="w-32 h-40 mx-auto mt-4 rounded md:w-72 md:h-96"
-      :src="`${
-        data.texts.photo ? data.texts.photo : 'src/assets/featuredImage.jpg'
-      }`"
+      :src="`${data.texts.photo ? data.texts.photo : PlaceHolder}`"
       :alt="`${data.texts.name} profile image`"
     />
     <div class="flex text-sm flex-col mt-2 mx-auto space-y-2">
